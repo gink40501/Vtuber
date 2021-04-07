@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -100,30 +101,7 @@ namespace vtuber
         public Form1()
         {
             InitializeComponent();
-            List<Live_hollo_vtube> hollo_undone;
-            var sr = new StreamReader("vbuter_網址.txt");
-            string vtuber_txt = sr.ReadToEnd();
-            sr.Close();
-            char[] t = new char[] { '\r', ' ', '\n' };
-            string[] vtuber_html = vtuber_txt.Split(t);
-            for (int i = 0; i < vtuber_html.Length; i = i + 1)
-            {
-                if (vtuber_html[i].Length > 10)
-                {
-                    hollo_undone = get_vtuber(vtuber_html[i]);
-                    foreach (var j in hollo_undone)
-                    {
-                        Architecture tt = new Architecture(flowLayoutPanel1, this);
-                        tt.set_up(j);
-                        v_tuber_total.Add(j);
-                        //v_tuber_total[v_tuber_total.Count - 1].Live_Time = j.Live_Time;
-                    }
-                }
-            }
-
-        }
-        private void Form1_Load(object sender, EventArgs e)
-        {
+            
 
         }
 
@@ -138,6 +116,8 @@ namespace vtuber
             List<string> www = new List<string>();
             List<Live_hollo_vtube> Live_Hollo_Vtubes = new List<Live_hollo_vtube>();
             string name_1="";
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             foreach (var i in htmlDoc.DocumentNode.SelectNodes("//script"))
             {
 
@@ -177,6 +157,11 @@ namespace vtuber
                             }
 
                         }
+                        if (jpg_vtuber.Count  > 10)
+                        {
+                            break;
+                        }
+
                         if (i1.Contains("startTime") == true && i1.Contains("startTimeSeconds") == false)
                         {
                             string[] time = i.InnerText.Split('"');
@@ -244,17 +229,72 @@ namespace vtuber
                string[] hal= i.inter.Split('/');
                 i.inter = "https://www.youtube.com/watch?v=" + hal[hal.Length - 1] + "&ab_channel=" + name_1;
             }
-               
 
+            stopwatch.Stop();
+            
             return Live_Hollo_Vtubes;
         }
-        void Picture(string url, PictureBox box)
+        
+       
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            box.Image = Image.FromStream(System.Net.WebRequest.Create(url).GetResponse().GetResponseStream());
-            box.SizeMode = PictureBoxSizeMode.StretchImage;
+            List<Live_hollo_vtube> hollo_undone;
+            
+            var sr = new StreamReader("vbuter_網址.txt");
+            string vtuber_txt = sr.ReadToEnd();
+            sr.Close();
+            char[] t = new char[] { '\r', ' ', '\n' };
+            string[] vtuber_html = vtuber_txt.Split(t);
+            for (int i = 0; i < vtuber_html.Length; i = i + 1)
+            {
+                if (vtuber_html[i].Length > 10)
+                {
+                    hollo_undone = get_vtuber(vtuber_html[i]);
+                    foreach (var j in hollo_undone)
+                    {
+                        
+                        v_tuber_total.Add(j);
+                        //v_tuber_total[v_tuber_total.Count - 1].Live_Time = j.Live_Time;
+                    }
+                }
+            }
+            v_tuber_total.Clear();
+            flowLayoutPanel1.Controls.Clear();
+            foreach (var i in v_tuber_total)
+            {
+                Architecture tt = new Architecture(flowLayoutPanel1, this);
+                tt.set_up(i);
+            }
         }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            backgroundWorker1.RunWorkerAsync();
+        }
 
-
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            List<Live_hollo_vtube> hollo_undone;
+            var sr = new StreamReader("vbuter_網址.txt");
+            string vtuber_txt = sr.ReadToEnd();
+            sr.Close();
+            char[] t = new char[] { '\r', ' ', '\n' };
+            string[] vtuber_html = vtuber_txt.Split(t);
+            for (int i = 0; i < vtuber_html.Length; i = i + 1)
+            {
+                if (vtuber_html[i].Length > 10)
+                {
+                    hollo_undone = get_vtuber(vtuber_html[i]);
+                    foreach (var j in hollo_undone)
+                    {
+                        Architecture tt = new Architecture(flowLayoutPanel1, this);
+                        tt.set_up(j);
+                        v_tuber_total.Add(j);
+                        //v_tuber_total[v_tuber_total.Count - 1].Live_Time = j.Live_Time;
+                    }
+                }
+            }
+        }
     }
 }
