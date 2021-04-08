@@ -75,7 +75,8 @@ namespace vtuber
                 picturebox.SizeMode = PictureBoxSizeMode.StretchImage;
 
 
-                LABEL.Text = (live.Live_Time.Equals("直播中~~") == true) ? "直播中" : "直播時間:" + live.Live_Time.ToString();
+                LABEL.Text = (live.Live_Time.Equals("直播中~~") == true) ? "直播中~~" : "直播時間:" + live.Live_Time.ToString();
+                LABEL .ForeColor= (live.Live_Time.Equals("直播中~~") == true) ?  Color.Red : Color.Black;
                 string NAME = live.name;
                 int i1 = 15;
                 for (int i = 0; i < NAME.Length / 15; i++)
@@ -272,11 +273,51 @@ namespace vtuber
                     }
                 }
             }
-            
+           
+            v_tuber_total = Sort(v_tuber_total);
             AddMessage(flowLayoutPanel1, v_tuber_total);
-            //flowLayoutPanel1.Controls.Clear();
+            
             
         }
+        List<Live_hollo_vtube> Sort(List<Live_hollo_vtube> vtubes)
+        {
+            int j1 = 0, i3 = 0;
+            for (int j2 = 0; j2 < vtubes.Count; j2++)
+            {
+                if (vtubes[j2].Live_Time == "直播中~~")
+                {
+                    Live_hollo_vtube live = vtubes[j2];
+                    vtubes[j2] = vtubes[j1];
+                    vtubes[j1] = live;
+                    j1++;
+                }
+
+            }
+            bool true_false = false;
+
+            for (int i1 = j1; i1 < vtubes.Count; i1++)
+            {
+                Live_hollo_vtube max = vtubes[i1];
+                for (int i2 = i1 + 1; i2 < vtubes.Count; i2++)
+                {
+                    if ((DateTime)max.Live_Time > (DateTime)vtubes[i2].Live_Time)
+                    {
+                        max = vtubes[i2];
+                        i3 = i2;
+                        true_false = true;
+                    }
+                }
+                if (true_false == true)
+                {
+                    Live_hollo_vtube live = vtubes[i1];//位置
+                    vtubes[i1] = vtubes[i3];
+                    vtubes[i3] = live;
+                }
+                true_false = false;
+            }
+            return vtubes;
+        }
+
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -286,6 +327,7 @@ namespace vtuber
         private void Form1_Shown(object sender, EventArgs e)
         {
             List<Live_hollo_vtube> hollo_undone;
+            List<Architecture> architectures = new List<Architecture>();
             var sr = new StreamReader("vbuter_網址.txt");
             string vtuber_txt = sr.ReadToEnd();
             sr.Close();
@@ -298,12 +340,17 @@ namespace vtuber
                     hollo_undone = get_vtuber(vtuber_html[i]);
                     foreach (var j in hollo_undone)
                     {
-                        Architecture tt = new Architecture(flowLayoutPanel1, this);
-                        tt.set_up(j);
+                        architectures.Add(new Architecture(flowLayoutPanel1, this));
+                        
                         v_tuber_total.Add(j);
                         //v_tuber_total[v_tuber_total.Count - 1].Live_Time = j.Live_Time;
                     }
                 }
+            }
+            v_tuber_total = Sort(v_tuber_total);
+            for(int i=0;i< v_tuber_total.Count; i++)
+            {
+                architectures[i].set_up(v_tuber_total[i]);
             }
         }
     }
