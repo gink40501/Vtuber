@@ -17,6 +17,9 @@ namespace vtuber
 {
     public partial class Form1 : Form
     {
+        List<Live_hollo_vtube> v_tuber_total = new List<Live_hollo_vtube>();
+        List<Architecture> architectures1 = new List<Architecture>();
+        private delegate void DelShowMessage(FlowLayoutPanel flowLayout_panel, List<Live_hollo_vtube> x);
 
         class Architecture
         {
@@ -76,7 +79,7 @@ namespace vtuber
 
 
                 LABEL.Text = (live.Live_Time.Equals("直播中~~") == true) ? "直播中~~" : "直播時間:" + live.Live_Time.ToString();
-                LABEL .ForeColor= (live.Live_Time.Equals("直播中~~") == true) ?  Color.Red : Color.Black;
+                LABEL.ForeColor = (live.Live_Time.Equals("直播中~~") == true) ? Color.Red : Color.Black;
                 string NAME = live.name;
                 int i1 = 15;
                 for (int i = 0; i < NAME.Length / 15; i++)
@@ -88,26 +91,55 @@ namespace vtuber
                 name.Text = NAME;
             }
 
+            public void Remove()
+            {
+                flow1.Controls.Remove(panel);
+            }
+
         }
-        List<Live_hollo_vtube> v_tuber_total = new List<Live_hollo_vtube>();
-        private delegate void DelShowMessage(FlowLayoutPanel flowLayout_panel, List<Live_hollo_vtube> x);
+
+
+
         private void AddMessage(FlowLayoutPanel flowLayout_panel, List<Live_hollo_vtube> x)
         {
             if (this.InvokeRequired) // 若非同執行緒
             {
                 DelShowMessage del = new DelShowMessage(AddMessage); //利用委派執行
-                object[] vs=new object[] { flowLayout_panel , x };
+                object[] vs = new object[] { flowLayout_panel, x };
                 this.Invoke(del, vs);
             }
             else // 同執行緒
             {
-                flowLayout_panel.Controls.Clear();
-
-                foreach (var i in x)
+                // flowLayout_panel.Controls.Remove();
+                //flowLayout_panel.Controls.Clear();
+                if (architectures1.Count < x.Count)
                 {
-                    Architecture tt = new Architecture(flowLayout_panel, this);
-                    tt.set_up(i);
+                    for (int i = architectures1.Count-1; i < x.Count-1; i++)//如果空間比較少就增加
+                    {
+                        architectures1.Add(new Architecture(flowLayout_panel, this));
+                    }
                 }
+                if(architectures1.Count > x.Count)
+                {
+                    for (int i= architectures1.Count-1;i> x.Count-1; i--)
+                    {
+                        architectures1[i].Remove();
+                        architectures1.Remove(architectures1[i]);
+                    }
+                }
+
+                for(int i = 0; i < x.Count; i++)
+                {
+                    architectures1[i].set_up(x[i]);
+                }
+
+
+
+                //foreach (var i in x)
+                //{
+                //    Architecture tt = new Architecture(flowLayout_panel, this);
+                //    tt.set_up(i);
+                //}
 
             }
         }
@@ -273,11 +305,11 @@ namespace vtuber
                     }
                 }
             }
-           
+
             v_tuber_total = Sort(v_tuber_total);
             AddMessage(flowLayoutPanel1, v_tuber_total);
-            
-            
+
+
         }
         List<Live_hollo_vtube> Sort(List<Live_hollo_vtube> vtubes)
         {
@@ -327,7 +359,7 @@ namespace vtuber
         private void Form1_Shown(object sender, EventArgs e)
         {
             List<Live_hollo_vtube> hollo_undone;
-            List<Architecture> architectures = new List<Architecture>();
+
             var sr = new StreamReader("vbuter_網址.txt");
             string vtuber_txt = sr.ReadToEnd();
             sr.Close();
@@ -340,17 +372,17 @@ namespace vtuber
                     hollo_undone = get_vtuber(vtuber_html[i]);
                     foreach (var j in hollo_undone)
                     {
-                        architectures.Add(new Architecture(flowLayoutPanel1, this));
-                        
+                        architectures1.Add(new Architecture(flowLayoutPanel1, this));
+
                         v_tuber_total.Add(j);
                         //v_tuber_total[v_tuber_total.Count - 1].Live_Time = j.Live_Time;
                     }
                 }
             }
             v_tuber_total = Sort(v_tuber_total);
-            for(int i=0;i< v_tuber_total.Count; i++)
+            for (int i = 0; i < v_tuber_total.Count; i++)
             {
-                architectures[i].set_up(v_tuber_total[i]);
+                architectures1[i].set_up(v_tuber_total[i]);
             }
         }
     }
