@@ -64,6 +64,7 @@ namespace vtuber
                 flow1 = flow;
                 this.from = from;
                 picturebox.Click += new System.EventHandler(this.pictureBox1_Click);
+                this.picturebox.Cursor = System.Windows.Forms.Cursors.Hand;
             }
 
             private void pictureBox1_Click(object sender, EventArgs e)
@@ -119,7 +120,7 @@ namespace vtuber
                         architectures1.Add(new Architecture(flowLayout_panel, this));
                     }
                 }
-                if(architectures1.Count > x.Count)
+                if(architectures1.Count > x.Count)//空間增加就減少
                 {
                     for (int i= architectures1.Count-1;i> x.Count-1; i--)
                     {
