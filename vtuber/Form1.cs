@@ -20,7 +20,6 @@ namespace vtuber
         List<Live_hollo_vtube> v_tuber_total = new List<Live_hollo_vtube>();
         List<Architecture> architectures1 = new List<Architecture>();
         private delegate void DelShowMessage(FlowLayoutPanel flowLayout_panel, List<Live_hollo_vtube> x);
-
         class Architecture
         {
             public Panel panel;
@@ -98,9 +97,6 @@ namespace vtuber
             }
 
         }
-
-
-
         private void AddMessage(FlowLayoutPanel flowLayout_panel, List<Live_hollo_vtube> x)
         {
             if (this.InvokeRequired) // 若非同執行緒
@@ -115,35 +111,27 @@ namespace vtuber
                 //flowLayout_panel.Controls.Clear();
                 if (architectures1.Count < x.Count)//直播數量大於放置的容器數量
                 {
-                    for (int i = architectures1.Count-1; i < x.Count-1; i++)
+                    for (int i = architectures1.Count - 1; i < x.Count - 1; i++)
                     {
                         architectures1.Add(new Architecture(flowLayout_panel, this));
                     }
                 }
-                if(architectures1.Count > x.Count)//直播數量小於放置的容器數量
+                if (architectures1.Count > x.Count)//直播數量小於放置的容器數量
                 {
-                    for (int i= architectures1.Count-1;i> x.Count-1; i--)
+                    for (int i = architectures1.Count - 1; i > x.Count - 1; i--)
                     {
                         architectures1[i].Remove();
                         architectures1.Remove(architectures1[i]);
                     }
                 }
 
-                for(int i = 0; i < x.Count; i++)
+                for (int i = 0; i < x.Count; i++)
                 {
                     architectures1[i].set_up(x[i]);
                 }
 
             }
         }
-
-
-
-        public Form1()
-        {
-            InitializeComponent();
-        }
-
         List<Live_hollo_vtube> get_vtuber(string html)
         {
 
@@ -273,37 +261,6 @@ namespace vtuber
 
             return Live_Hollo_Vtubes;
         }
-
-
-
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
-        {
-            List<Live_hollo_vtube> hollo_undone;
-            v_tuber_total.Clear();
-            var sr = new StreamReader("vbuter_網址.txt");
-            string vtuber_txt = sr.ReadToEnd();
-            sr.Close();
-            char[] t = new char[] { '\r', ' ', '\n' };
-            string[] vtuber_html = vtuber_txt.Split(t);
-            for (int i = 0; i < vtuber_html.Length; i = i + 1)
-            {
-                if (vtuber_html[i].Length > 10)
-                {
-                    hollo_undone = get_vtuber(vtuber_html[i]);
-                    foreach (var j in hollo_undone)
-                    {
-
-                        v_tuber_total.Add(j);
-                        //v_tuber_total[v_tuber_total.Count - 1].Live_Time = j.Live_Time;
-                    }
-                }
-            }
-
-            v_tuber_total = Sort(v_tuber_total);
-            AddMessage(flowLayoutPanel1, v_tuber_total);
-
-
-        }
         List<Live_hollo_vtube> Sort(List<Live_hollo_vtube> vtubes)
         {
             int j1 = 0, i3 = 0;
@@ -343,12 +300,10 @@ namespace vtuber
             return vtubes;
         }
 
-
-        private void timer1_Tick(object sender, EventArgs e)
+        public Form1()
         {
-            backgroundWorker1.RunWorkerAsync();
+            InitializeComponent();
         }
-
         private void Form1_Shown(object sender, EventArgs e)
         {
             List<Live_hollo_vtube> hollo_undone;
@@ -378,5 +333,35 @@ namespace vtuber
                 architectures1[i].set_up(v_tuber_total[i]);
             }
         }
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            List<Live_hollo_vtube> hollo_undone;
+            v_tuber_total.Clear();
+            var sr = new StreamReader("vbuter_網址.txt");
+            string vtuber_txt = sr.ReadToEnd();
+            sr.Close();
+            char[] t = new char[] { '\r', ' ', '\n' };
+            string[] vtuber_html = vtuber_txt.Split(t);
+            for (int i = 0; i < vtuber_html.Length; i = i + 1)
+            {
+                if (vtuber_html[i].Length > 10)
+                {
+                    hollo_undone = get_vtuber(vtuber_html[i]);
+                    foreach (var j in hollo_undone)
+                    {
+                        v_tuber_total.Add(j);
+                    }
+                }
+            }
+            v_tuber_total = Sort(v_tuber_total);
+            AddMessage(flowLayoutPanel1, v_tuber_total);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            backgroundWorker1.RunWorkerAsync();
+        }
+
+
     }
 }
