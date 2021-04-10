@@ -113,14 +113,14 @@ namespace vtuber
             {
                 // flowLayout_panel.Controls.Remove();
                 //flowLayout_panel.Controls.Clear();
-                if (architectures1.Count < x.Count)
+                if (architectures1.Count < x.Count)//直播數量大於放置的容器數量
                 {
-                    for (int i = architectures1.Count-1; i < x.Count-1; i++)//如果空間比較少就增加
+                    for (int i = architectures1.Count-1; i < x.Count-1; i++)
                     {
                         architectures1.Add(new Architecture(flowLayout_panel, this));
                     }
                 }
-                if(architectures1.Count > x.Count)//空間增加就減少
+                if(architectures1.Count > x.Count)//直播數量小於放置的容器數量
                 {
                     for (int i= architectures1.Count-1;i> x.Count-1; i--)
                     {
@@ -133,14 +133,6 @@ namespace vtuber
                 {
                     architectures1[i].set_up(x[i]);
                 }
-
-
-
-                //foreach (var i in x)
-                //{
-                //    Architecture tt = new Architecture(flowLayout_panel, this);
-                //    tt.set_up(i);
-                //}
 
             }
         }
