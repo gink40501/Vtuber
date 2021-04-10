@@ -12,6 +12,6 @@
 
 （下載通知一聲）
 
-如果有什麼覺得需要補充的功能可直接傳送email
+如果有什麼覺得需要補充的功能可直接寄email
 
 ![image](https://github.com/gink40501/test/blob/master/vtuber__jpg.PNG)
