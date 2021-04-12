@@ -28,12 +28,15 @@ namespace vtuber
             public FlowLayoutPanel flow1;
             public Form from;
             public Label name;
+            public Label time;
+            public object Date;
             public Architecture(FlowLayoutPanel flow, Form form)
             {
                 panel = new Panel();
                 picturebox = new PictureBox();
                 LABEL = new Label();
                 name = new Label();
+                time = new Label();
                 ///////////
                 panel.Size = new Size(201, 265);
                 // panel.Location = now_panel.Location;
@@ -50,6 +53,12 @@ namespace vtuber
                 name.Location = new Point(9, 166);
                 name.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
                 name.TabIndex = 1;
+                //////////
+                time.Size = new Size(50, 18);
+                time.Location = new Point(9, (int)(133 + 166) / 2);
+                time.Text = "";
+                this.time.AutoSize = true;
+                //////////////
 
                 LABEL.AutoSize = true;
                 name.AutoSize = true;
@@ -57,6 +66,7 @@ namespace vtuber
                 panel.BackColor = Color.White;
                 panel.Controls.Add(picturebox);
                 panel.Controls.Add(name);
+                panel.Controls.Add(time);
                 panel.Controls.Add(LABEL);
                 flow.Controls.Add(panel);
                 form.Controls.Add(flow);
@@ -80,6 +90,7 @@ namespace vtuber
 
                 LABEL.Text = (live.Live_Time.Equals("直播中~~") == true) ? "直播中~~" : "直播時間:" + live.Live_Time.ToString();
                 LABEL.ForeColor = (live.Live_Time.Equals("直播中~~") == true) ? Color.Red : Color.Black;
+                Date = live.Live_Time;
                 string NAME = live.name;
                 int i1 = 15;
                 for (int i = 0; i < NAME.Length / 15; i++)
@@ -303,6 +314,11 @@ namespace vtuber
         public Form1()
         {
             InitializeComponent();
+            DateTime time;
+            time = DateTime.Now;
+            DateTime time1;
+            time1 = DateTime.Now;
+            
         }
         private void Form1_Shown(object sender, EventArgs e)
         {
@@ -362,6 +378,31 @@ namespace vtuber
             backgroundWorker1.RunWorkerAsync();
         }
 
-
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            foreach(var i in architectures1)
+            {
+                if (i.Date != "直播中~~")
+                {
+                    DateTime time = (DateTime)i.Date;//vtuber的時間
+                    DateTime time1;
+                    time1 = DateTime.Now;
+                    TimeSpan ts = new TimeSpan(time.Ticks-time1.Ticks);
+                    var total_sec =ts.TotalSeconds;
+                    int total_sec_1 = (int)total_sec;
+                    int s = (int)total_sec_1 % 60;
+                    int min = (total_sec_1=(int)((total_sec_1 - s) / 60)) % 60;
+                    int h = (int)total_sec_1 / 60;
+                    if (h < 24)
+                        i.time.Text = "直播時間: " + h + ":" + min + ":" + s;
+                    else
+                        i.time.Text = "";
+                }
+                else
+                {
+                    i.time.Text = "";
+                }
+            }
+        }
     }
 }
