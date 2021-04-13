@@ -15,11 +15,43 @@ using vtuber.Properties;
 
 namespace vtuber
 {
-    public partial class Form1 : Form
+    public partial class Vtuber_直播 : Form
     {
         List<Live_hollo_vtube> v_tuber_total = new List<Live_hollo_vtube>();
         List<Architecture> architectures1 = new List<Architecture>();
-        private delegate void DelShowMessage(FlowLayoutPanel flowLayout_panel, List<Live_hollo_vtube> x);
+        List<Author> authors = new List<Author>();
+        private delegate void DelShowMessage(FlowLayoutPanel flowLayout_panel, List<Live_hollo_vtube> x, FlowLayoutPanel flow, bool T_F);
+        class Author
+        {
+            string image;
+            string html;
+            public PictureBox picturebox;
+            public FlowLayoutPanel flow1;
+            public Author(string IMAGE,string HTML)
+            {
+                image = IMAGE;
+                html = HTML;
+            }
+            public void set(FlowLayoutPanel flow, Form form)
+            {
+                picturebox = new PictureBox();
+                picturebox.Image = Image.FromStream(System.Net.WebRequest.Create(image).GetResponse().GetResponseStream());
+                picturebox.SizeMode = PictureBoxSizeMode.StretchImage;
+                picturebox.Size = new Size(161, 129);
+                picturebox.Location = new Point(16, 1);
+                flow.Controls.Add(picturebox);
+                picturebox.Name = html;
+                picturebox.Click += new System.EventHandler(this.pictureBox1_Click);
+                this.picturebox.Cursor = System.Windows.Forms.Cursors.Hand;
+                this.picturebox.Cursor = System.Windows.Forms.Cursors.Hand;
+            }
+
+            private void pictureBox1_Click(object sender, EventArgs e)
+            {
+                PictureBox THML = (PictureBox)sender;
+                System.Diagnostics.Process.Start(THML.Name.ToString());
+            }
+        }
         class Architecture
         {
             public Panel panel;
@@ -108,12 +140,12 @@ namespace vtuber
             }
 
         }
-        private void AddMessage(FlowLayoutPanel flowLayout_panel, List<Live_hollo_vtube> x)
+        private void AddMessage(FlowLayoutPanel flowLayout_panel, List<Live_hollo_vtube> x, FlowLayoutPanel flow,bool T_F)
         {
             if (this.InvokeRequired) // 若非同執行緒
             {
                 DelShowMessage del = new DelShowMessage(AddMessage); //利用委派執行
-                object[] vs = new object[] { flowLayout_panel, x };
+                object[] vs = new object[] { flowLayout_panel, x , flow ,T_F};
                 this.Invoke(del, vs);
             }
             else // 同執行緒
@@ -140,7 +172,11 @@ namespace vtuber
                 {
                     architectures1[i].set_up(x[i]);
                 }
-
+                if (T_F == false)
+                {
+                    authors[authors.Count - 1].set(flow, this);
+                }
+                
             }
         }//多執行續委派ui介面控制
         List<Live_hollo_vtube> get_vtuber(string html)
@@ -155,9 +191,33 @@ namespace vtuber
             List<Live_hollo_vtube> Live_Hollo_Vtubes = new List<Live_hollo_vtube>();
             string name_1 = "";
             Stopwatch stopwatch = new Stopwatch();
+            Author TEST;
             stopwatch.Start();
             foreach (var i in htmlDoc.DocumentNode.SelectNodes("//script"))
             {
+                int x = 0;
+                if (i.InnerText.Contains("https://yt3.ggpht.") == true)
+                {
+                    
+                    string[] gght = i.InnerText.Split('"');
+                    foreach (var i1 in gght)
+                    {
+                        if (i1.Contains("https://yt3.ggpht.") == true)
+                        {
+                            if (x == 2)
+                            {
+                                TEST = new Author(i1, html);
+                                if(-1 == authors.IndexOf(TEST))
+                                {
+                                    authors.Add(new Author(i1, html));
+                                }
+                                break;
+                            }
+                            x++;
+                        }
+                    }
+                }
+
 
                 if (i.InnerText.Contains("ownerText") == true)
                 {
@@ -311,11 +371,28 @@ namespace vtuber
             return vtubes;
         }//詳細爬蟲的演算法可參考https://jerrynest.io/python-youtube-hash-img/
 
-        public Form1()
+        public Vtuber_直播()
         {
             InitializeComponent();
-            
+
         }
+        public Vtuber_直播(string HTML_1)
+        {
+            if (HTML_1.Contains("https") == true)
+            {
+                StreamReader stream = new StreamReader("vbuter_網址.txt");
+                string totoal_html = stream.ReadToEnd();
+                stream.Close();
+                StreamWriter stream1 = new StreamWriter("vbuter_網址.txt");
+                totoal_html = totoal_html + HTML_1;
+                stream1.Write(totoal_html);
+                stream1.Close();
+            }
+            
+
+        }
+
+
         private void Form1_Shown(object sender, EventArgs e)//第一次先抓取資料(爬蟲)所以會用比較久的時間 跟第352行的程式執行一樣的事情
         {
             List<Live_hollo_vtube> hollo_undone;
@@ -344,10 +421,15 @@ namespace vtuber
             {
                 architectures1[i].set_up(v_tuber_total[i]);
             }
+            foreach(var i in authors)
+            {
+                i.set(flowLayoutPanel2,this);
+            }
         }
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)//多執行續裡面的計算方式
         {
             List<Live_hollo_vtube> hollo_undone;
+            int ling = authors.Count - 1;
             v_tuber_total.Clear();//歸零將是一次的資料清除
             var sr = new StreamReader("vbuter_網址.txt");
             string vtuber_txt = sr.ReadToEnd();//開啟txt的網址檔案(因為不是使用api所以爬蟲的資料比較久)
@@ -366,7 +448,7 @@ namespace vtuber
                 }
             }
             v_tuber_total = Sort(v_tuber_total);
-            AddMessage(flowLayoutPanel1, v_tuber_total);
+            AddMessage(flowLayoutPanel1, v_tuber_total, flowLayoutPanel2, ling== authors.Count - 1);
         }
 
         private void timer1_Tick(object sender, EventArgs e)//多執行續 1:30 更新一次
@@ -376,29 +458,53 @@ namespace vtuber
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-            foreach(var i in architectures1)
+            foreach (var i in architectures1)
             {
                 if (i.Date != "直播中~~")
                 {
                     DateTime time = (DateTime)i.Date;//vtuber的時間
                     DateTime time1;
                     time1 = DateTime.Now;
-                    TimeSpan ts = new TimeSpan(time.Ticks-time1.Ticks);//全部的倒數秒數
-                    var total_sec =ts.TotalSeconds;
+                    TimeSpan ts = new TimeSpan(time.Ticks - time1.Ticks);//全部的倒數秒數
+                    var total_sec = ts.TotalSeconds;
                     int total_sec_1 = (int)total_sec;
                     int s = (int)total_sec_1 % 60;//秒
-                    int min = (total_sec_1=(int)((total_sec_1 - s) / 60)) % 60;//分
+                    int min = (total_sec_1 = (int)((total_sec_1 - s) / 60)) % 60;//分
                     int h = (int)total_sec_1 / 60;//時
-                    if (h < 24)
+                    if (h < 24 && h + s + min > 0)
+                    {
                         i.time.Text = "倒數直播: " + h + ":" + min + ":" + s;
+
+                    }
                     else
+                    {
                         i.time.Text = "";
+                    }
+                    if (h + s + min < 0)
+                    {
+                        i.LABEL.Text = "直播中~~";
+                        i.LABEL.ForeColor = Color.Red;
+                    }
                 }
                 else
                 {
+
                     i.time.Text = "";
                 }
+                flowLayoutPanel1.AutoScroll = true;
             }
+        }
+
+        private void 新增網址ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            input_html input = new input_html();
+            input.ShowDialog();
+        }
+
+        private void 刪除網址ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            delete delete = new delete();
+            delete.ShowDialog();
         }
     }
 }
