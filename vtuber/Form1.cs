@@ -74,7 +74,7 @@ namespace vtuber
                 this.from = from;
                 picturebox.Click += new System.EventHandler(this.pictureBox1_Click);
                 this.picturebox.Cursor = System.Windows.Forms.Cursors.Hand;
-            }
+            }//設定框框
 
             private void pictureBox1_Click(object sender, EventArgs e)
             {
@@ -142,7 +142,7 @@ namespace vtuber
                 }
 
             }
-        }
+        }//多執行續委派ui介面控制
         List<Live_hollo_vtube> get_vtuber(string html)
         {
 
@@ -309,18 +309,14 @@ namespace vtuber
                 true_false = false;
             }
             return vtubes;
-        }
+        }//詳細爬蟲的演算法可參考https://jerrynest.io/python-youtube-hash-img/
 
         public Form1()
         {
             InitializeComponent();
-            DateTime time;
-            time = DateTime.Now;
-            DateTime time1;
-            time1 = DateTime.Now;
             
         }
-        private void Form1_Shown(object sender, EventArgs e)
+        private void Form1_Shown(object sender, EventArgs e)//第一次先抓取資料(爬蟲)所以會用比較久的時間 跟第352行的程式執行一樣的事情
         {
             List<Live_hollo_vtube> hollo_undone;
 
@@ -349,20 +345,20 @@ namespace vtuber
                 architectures1[i].set_up(v_tuber_total[i]);
             }
         }
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)//多執行續裡面的計算方式
         {
             List<Live_hollo_vtube> hollo_undone;
-            v_tuber_total.Clear();
+            v_tuber_total.Clear();//歸零將是一次的資料清除
             var sr = new StreamReader("vbuter_網址.txt");
-            string vtuber_txt = sr.ReadToEnd();
-            sr.Close();
+            string vtuber_txt = sr.ReadToEnd();//開啟txt的網址檔案(因為不是使用api所以爬蟲的資料比較久)
+            sr.Close();//關閉檔案
             char[] t = new char[] { '\r', ' ', '\n' };
-            string[] vtuber_html = vtuber_txt.Split(t);
+            string[] vtuber_html = vtuber_txt.Split(t);//字串分割
             for (int i = 0; i < vtuber_html.Length; i = i + 1)
             {
                 if (vtuber_html[i].Length > 10)
                 {
-                    hollo_undone = get_vtuber(vtuber_html[i]);
+                    hollo_undone = get_vtuber(vtuber_html[i]);//將爬蟲所得到的直播或是提醒直播的資料存你來
                     foreach (var j in hollo_undone)
                     {
                         v_tuber_total.Add(j);
@@ -373,7 +369,7 @@ namespace vtuber
             AddMessage(flowLayoutPanel1, v_tuber_total);
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)//多執行續 1:30 更新一次
         {
             backgroundWorker1.RunWorkerAsync();
         }
@@ -387,14 +383,14 @@ namespace vtuber
                     DateTime time = (DateTime)i.Date;//vtuber的時間
                     DateTime time1;
                     time1 = DateTime.Now;
-                    TimeSpan ts = new TimeSpan(time.Ticks-time1.Ticks);
+                    TimeSpan ts = new TimeSpan(time.Ticks-time1.Ticks);//全部的倒數秒數
                     var total_sec =ts.TotalSeconds;
                     int total_sec_1 = (int)total_sec;
-                    int s = (int)total_sec_1 % 60;
-                    int min = (total_sec_1=(int)((total_sec_1 - s) / 60)) % 60;
-                    int h = (int)total_sec_1 / 60;
+                    int s = (int)total_sec_1 % 60;//秒
+                    int min = (total_sec_1=(int)((total_sec_1 - s) / 60)) % 60;//分
+                    int h = (int)total_sec_1 / 60;//時
                     if (h < 24)
-                        i.time.Text = "直播時間: " + h + ":" + min + ":" + s;
+                        i.time.Text = "倒數直播: " + h + ":" + min + ":" + s;
                     else
                         i.time.Text = "";
                 }

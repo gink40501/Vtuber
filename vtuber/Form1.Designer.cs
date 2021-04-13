@@ -34,7 +34,6 @@ namespace vtuber
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // flowLayoutPanel1
@@ -65,15 +64,6 @@ namespace vtuber
             this.timer2.Enabled = true;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(350, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(33, 12);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "label1";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -81,14 +71,12 @@ namespace vtuber
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.ClientSize = new System.Drawing.Size(1024, 518);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -97,7 +85,6 @@ namespace vtuber
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timer2;
-        private System.Windows.Forms.Label label1;
     }
 }
 
