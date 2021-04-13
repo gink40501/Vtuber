@@ -12,4 +12,6 @@
 
 如果有什麼覺得需要補充的功能可直接寄email
 
+2021/4/14 增加倒數計時功能
+
 ![image](https://github.com/gink40501/test/blob/master/vtuber__jpg.PNG)
