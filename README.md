@@ -14,4 +14,6 @@
 
 2021/4/14 增加倒數計時功能
 
+2021/4/22 加入 可自行加入網址 並且可觀看所有加入的Vtuber
+
 ![image](https://github.com/gink40501/test/blob/master/vtuber__jpg.PNG)
