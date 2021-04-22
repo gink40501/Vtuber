@@ -23,10 +23,10 @@ namespace vtuber
         private delegate void DelShowMessage(FlowLayoutPanel flowLayout_panel, List<Live_hollo_vtube> x, FlowLayoutPanel flow, bool T_F);
         class Author
         {
-            string image;
-            string html;
-            public PictureBox picturebox;
-            public FlowLayoutPanel flow1;
+            public string image;
+            public string html;
+             PictureBox picturebox;
+             FlowLayoutPanel flow1;
             public Author(string IMAGE,string HTML)
             {
                 image = IMAGE;
@@ -207,7 +207,17 @@ namespace vtuber
                             if (x == 2)
                             {
                                 TEST = new Author(i1, html);
-                                if(-1 == authors.IndexOf(TEST))
+                                bool t_f = false;
+                                foreach(var j in authors)
+                                {
+                                    if(j.html == TEST.html)
+                                    {
+                                        t_f = true;
+                                        break;
+                                    }
+                                }
+                                
+                                if (t_f==false)
                                 {
                                     authors.Add(new Author(i1, html));
                                 }
