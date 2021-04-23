@@ -48,7 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>ati2h-t7lnp-001.ico</ApplicationIcon>
+    <ApplicationIcon>adyec-jju7v-002.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.11.32.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
@@ -69,9 +69,11 @@
   <ItemGroup>
     <Compile Include="delete.cs">
       <SubType>Form</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="delete.Designer.cs">
       <DependentUpon>delete.cs</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="main.cs">
       <SubType>Form</SubType>
@@ -89,6 +91,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="delete.resx">
       <DependentUpon>delete.cs</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="main.resx">
       <DependentUpon>main.cs</DependentUpon>
@@ -123,11 +126,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ati2h-t7lnp-001.ico">
+    <None Include="Resources\擷取.PNG" />
+    <Content Include="adyec-jju7v-002.ico" />
+    <Content Include="vtuber__jpg1.PNG">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\擷取.PNG" />
-    <Content Include="vtuber__jpg.PNG" />
     <Content Include="擷取.PNG">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -61,16 +61,6 @@ namespace vtuber.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 (圖示) 的類型 System.Drawing.Icon 當地語系化資源。
-        /// </summary>
-        internal static System.Drawing.Icon ati2h_t7lnp_001 {
-            get {
-                object obj = ResourceManager.GetObject("ati2h_t7lnp_001", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
         internal static System.Drawing.Bitmap 擷取 {
