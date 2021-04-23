@@ -16,4 +16,4 @@
 
 2021/4/22 加入 可自行加入網址 並且可觀看所有加入的Vtuber(加入後不會即時反應 會等到下次更新一併更新)
 
-![image](https://github.com/gink40501/test/blob/master/vtuber__jpg.PNG)
+![image](https://github.com/gink40501/Vtuber-Live-broadcast-reminder-undone/blob/master/vtuber__jpg1.PNG)
